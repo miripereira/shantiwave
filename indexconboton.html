@@ -1,0 +1,113 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<style>
+  .card-deck {
+    margin-top: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+  }
+  .card {
+    width: 300px;
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  .card img {
+    height: 200px;
+    object-fit: cover;
+    border-radius: 10px 10px 0 0;
+  }
+</style>
+
+<div class="container">
+  <h1 class="text-center mt-4">Nuestros Cursos</h1>
+  <div class="card-deck" id="card-deck"></div>
+</div>
+
+<script>
+  function obtenerDatos() {
+    fetch('https://shantiwave-2f3a6-default-rtdb.firebaseio.com/cursos.json')
+      .then(response => response.json())
+      .then(data => {
+        const cardDeck = document.getElementById('card-deck');
+        cardDeck.innerHTML = '';
+
+        for (let key in data) {
+          const objeto = data[key];
+
+          // Crear la card
+          const card = document.createElement('div');
+          card.classList.add('card');
+
+          // Asignar imagen según el ID del curso o usar una imagen genérica si está vacía
+          let imagenURL = '';
+          if (objeto.imagen) {
+            imagenURL = objeto.imagen;
+          } else {
+            // Imágenes locales según el ID
+            if (key === '-NyleJ45H1k6MN-RHpLP') {
+              imagenURL = "{{ url_for('static', filename='img/img1.jpg') }}";
+            } else if (key === '-NypdldaKkuVxPU1loCr') {
+              imagenURL = "{{ url_for('static', filename='img/img2.jpg') }}";
+            } else if (key === '-NyqvA7DnjU_6vY0Eq8P') {
+              imagenURL = "{{ url_for('static', filename='img/img3.jpg') }}";
+            } else {
+              imagenURL = "{{ url_for('static', filename='img/placeholder.jpg') }}";
+            }
+          }
+
+          // Agregar imagen a la card
+          const imagen = document.createElement('img');
+          imagen.classList.add('card-img-top');
+          imagen.src = imagenURL;
+
+          // Crear el cuerpo de la card
+          const cardBody = document.createElement('div');
+          cardBody.classList.add('card-body');
+
+          const titulo = document.createElement('h5');
+          titulo.classList.add('card-title');
+          titulo.textContent = objeto["nombrecurso"];
+
+          const duracion = document.createElement('p');
+          duracion.classList.add('card-text');
+          duracion.textContent = 'Duración: ' + objeto.duracion + ' horas';
+
+          const valor = document.createElement('p');
+          valor.classList.add('card-text');
+          valor.textContent = 'Valor: $' + objeto.valor;
+
+          const botonDetalle = document.createElement('button'); // Crear el botón de detalle
+          botonDetalle.classList.add('btn', 'btn-primary');
+          botonDetalle.textContent = 'Detalle';
+          botonDetalle.addEventListener('click', function() {
+            const id = key;
+            window.location.href = "{{ url_for('otra_pagina2') }}?id=" + id;
+          });
+
+          // Agregar elementos al cuerpo de la card
+          cardBody.appendChild(titulo);
+          cardBody.appendChild(duracion);
+          cardBody.appendChild(valor);
+          cardBody.appendChild(botonDetalle);
+
+          // Agregar la imagen y el cuerpo a la card
+          card.appendChild(imagen);
+          card.appendChild(cardBody);
+
+          // Agregar la card al contenedor
+          cardDeck.appendChild(card);
+        }
+      })
+      .catch(error => {
+        console.error('Error al obtener los datos:', error);
+      });
+  }
+
+  // Llamar a la función para obtener datos
+  obtenerDatos();
+</script>
+{% endblock %}

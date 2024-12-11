@@ -1,0 +1,32 @@
+{% extends "layout.html" %}
+
+{% block content %}
+  <h1 class="text-center" style="color: #002C59;">Contáctanos</h1>
+
+  <p class="text-center" style="color: #6B4F1D;">
+    Si tienes preguntas o quieres más información, puedes contactarnos a través del siguiente formulario o enviarnos un correo a <strong>contacto@shantiwave.com</strong>.
+  </p>
+
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-6">
+        <form action="/send_contact" method="POST">
+          <div class="mb-3">
+            <label for="name" class="form-label" style="color: #002C59;">Nombre</label>
+            <input type="text" class="form-control" id="name" name="name" placeholder="Ingresa tu nombre" required>
+          </div>
+          <div class="mb-3">
+            <label for="email" class="form-label" style="color: #002C59;">Correo Electrónico</label>
+            <input type="email" class="form-control" id="email" name="email" placeholder="Ingresa tu correo" required>
+          </div>
+          <div class="mb-3">
+            <label for="message" class="form-label" style="color: #002C59;">Mensaje</label>
+            <textarea class="form-control" id="message" name="message" rows="4" placeholder="Escribe tu mensaje aquí" required></textarea>
+          </div>
+          <button type="submit" class="btn" style="background-color: #C39248; color: white;">Enviar</button>
+        </form>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
